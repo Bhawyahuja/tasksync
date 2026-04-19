@@ -172,6 +172,8 @@ https://drive.google.com/file/d/18bGQsLGndRKE3ISD9C_okgbyen7_E3Lv/view?usp=shari
 
 ## Screenshots
 
-![Login](assets/login.jpeg)
-![Home Screen](assets/home.jpeg)
-![Add Task](assets/add_task.jpeg)
+<p align="center">
+  <img src="assets/login.jpeg" width="30%" />
+  <img src="assets/home.jpeg" width="30%" />
+  <img src="assets/add_task.jpeg" width="30%" />
+</p>
