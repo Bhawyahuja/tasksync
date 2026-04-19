@@ -2,9 +2,13 @@
 
 A simple Flutter todo app built using the JSONPlaceholder API.
 
-This was created as part of an assignment, but I tried to structure it close to how I’d build a real
-feature with clean separation of layers, BLoC for state management, API integration, and basic
-offline support.
+This was done as part of an assignment, but I tried to structure it close to how I’d normally build a feature with clean separation of layers, BLoC for state management, API integration, and basic offline support.
+
+---
+
+## Demo
+
+Video: https://drive.google.com/file/d/18bGQsLGndRKE3ISD9C_okgbyen7_E3Lv/view?usp=sharing
 
 ---
 
@@ -14,6 +18,15 @@ offline support.
 Email: demo@tasksync.dev  
 Password: password123
 ```
+---
+
+## Screenshots
+
+<p align="center">
+  <img src="assets/login.jpeg" width="30%" />
+  <img src="assets/home.jpeg" width="30%" />
+  <img src="assets/add_task.jpeg" width="30%" />
+</p>
 
 ---
 
@@ -27,7 +40,7 @@ The project uses FVM with Flutter `3.41.6`.
 .fvm/flutter_sdk/bin/flutter run
 ```
 
-Optional checks:
+Optional:
 
 ```sh
 .fvm/flutter_sdk/bin/flutter analyze
@@ -44,7 +57,7 @@ build/app/outputs/flutter-apk/app-debug.apk
 
 ## Features
 
-* View todos (fetched from API + cached locally)
+* View todos (from API + cached locally)
 * Add new task
 * Mark task as complete/incomplete
 * Delete task (with confirmation)
@@ -55,50 +68,50 @@ build/app/outputs/flutter-apk/app-debug.apk
 * Optimistic updates for better UX
 * Manual sync button
 * Auto sync when connection is restored
-* Basic mock login screen
+* Simple mock login
 
 ---
 
 ## Project Structure
 
-The project is divided into clear layers:
+The project is split into a few main layers:
 
 ```
 lib/
- ├── app/              → routing + app setup
- ├── core/             → shared utilities (network, helpers)
+ ├── app/              → routing and setup
+ ├── core/             → shared utilities
  ├── features/
- │    ├── auth/        → login
+ │    ├── auth/
  │    └── tasks/
- │         ├── data/         → API + local storage
- │         ├── domain/       → entity + repository contract
- │         └── presentation/ → UI + BLoC
+ │         ├── data/
+ │         ├── domain/
+ │         └── presentation/
 ```
 
-UI is split into smaller reusable widgets like:
+Inside the tasks feature:
 
-* task list
-* task tile
-* add task bottom sheet
-* skeleton loader
+* `data` handles API + local storage
+* `domain` contains the entity and repository contract
+* `presentation` includes UI + BLoC
+
+UI is broken into smaller widgets like task list, task tile, add task sheet, and skeleton loader.
 
 ---
 
-## BLoC Approach
+## BLoC
 
-`TaskBloc` manages all task-related logic:
+`TaskBloc` handles all task-related actions:
 
 * loading tasks
 * adding tasks
 * updating completion
 * deleting tasks
-* searching
+* search and filter
 * syncing pending changes
 
-State is kept simple using a single `TaskState` with a status (loading/success/error) instead of
-multiple complex states.
+State is kept simple using a single `TaskState` with a status (`initial`, `loading`, `success`, `error`) instead of multiple state classes.
 
-Some responsibilities were moved out of the BLoC to keep it clean:
+To keep the bloc readable, some responsibilities are moved out:
 
 * connectivity handling
 * user-facing messages
@@ -106,9 +119,9 @@ Some responsibilities were moved out of the BLoC to keep it clean:
 
 ---
 
-## API Integration
+## API
 
-Used JSONPlaceholder endpoints:
+Using JSONPlaceholder endpoints:
 
 ```
 GET    /todos
@@ -117,25 +130,21 @@ PATCH  /todos/:id
 DELETE /todos/:id
 ```
 
-Dio is used for networking with basic setup for:
-
-* base URL
-* error handling
-* debug logs
+Dio is used for networking with basic setup for base URL, error handling, and logging.
 
 ---
 
 ## Offline Support
 
-Implemented a simple offline-first approach:
+A simple offline-first approach:
 
 * Todos are cached locally using `shared_preferences`
 * UI updates immediately (optimistic updates)
-* Changes are stored in a pending queue
-* Sync is retried:
+* Changes are stored as pending operations
+* Sync happens:
 
-    * manually (sync button)
-    * automatically when connection is restored
+  * manually (via sync button)
+  * automatically when internet is restored
 
 Since JSONPlaceholder doesn’t persist changes, local data is treated as the source of truth.
 
@@ -143,37 +152,19 @@ Since JSONPlaceholder doesn’t persist changes, local data is treated as the so
 
 ## Assumptions
 
-* Login is mocked (no real authentication)
-* Search is local
-* JSONPlaceholder is treated as a non-persistent API
-* `shared_preferences` is used for simplicity (can be replaced with Hive/Drift in real apps)
+* Login is mocked
+* Search is handled locally
+* API is treated as non-persistent
+* `shared_preferences` is used for simplicity (can be replaced with Hive/Drift in a real app)
 
 ---
 
 ## Challenges
 
-* JSONPlaceholder doesn’t actually persist writes, so local state handling was required
-* Managing offline sync without overcomplicating the logic
-* Keeping BLoC clean while handling multiple responsibilities
+* JSONPlaceholder doesn’t actually persist writes, so local state handling was needed
+* Keeping offline sync simple without overcomplicating the logic
+* Avoiding making the BLoC too heavy
 * Balancing UI polish with time constraints
 
 ---
 
-## Notes
-
-* Focus was on clean structure, readability, and handling real-world scenarios like offline support
-* UI is kept simple but slightly styled for better usability
-
----
-
-# Demo Link
-
-https://drive.google.com/file/d/18bGQsLGndRKE3ISD9C_okgbyen7_E3Lv/view?usp=sharing
-
-## Screenshots
-
-<p align="center">
-  <img src="assets/login.jpeg" width="30%" />
-  <img src="assets/home.jpeg" width="30%" />
-  <img src="assets/add_task.jpeg" width="30%" />
-</p>
